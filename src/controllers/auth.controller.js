@@ -3,7 +3,7 @@ import { generateToken } from "../utils/generateToken.js";
 
 export const registerAdmin = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     const userExists = await User.findOne({ email });
     if (userExists) {
@@ -14,12 +14,14 @@ export const registerAdmin = async (req, res) => {
       name,
       email,
       password,
+      role,
     });
 
     res.status(201).json({
       _id: user._id,
       name: user.name,
       email: user.email,
+      role: user.role,
       token: generateToken(user._id),
     });
   } catch (error) {
@@ -37,6 +39,7 @@ export const loginAdmin = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role,
         token: generateToken(user._id),
       });
     } else {
