@@ -28,6 +28,18 @@ export const getAllOrders = async (req, res) => {
   }
 };
 
+export const getMyOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ user: req.params.id })
+      .populate("products.product")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export const updateOrderStatus = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
